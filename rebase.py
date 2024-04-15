@@ -14,10 +14,11 @@ mag_d  = 5.2    # magnet diameter (mm)
 mag_h  = 2.8    # magnet height (mm)
 shim_d = 18.4   # shim diameter (mm)
 shim_h = 1.7    # shim height (mm)
-hollow_d = 0    # diameter to hollow out from stock (mm), 0 = auto-detect (leaves 1.5 mm edge)
+hollow_d = 0    # diameter to hollow out from stock (mm), 0 = auto-detect
 hollow_h = 2.2  # height to remove from bottom (mm), 0 = disable
 theta = 70      # degrees of edges, 90 = square edges
-cut_h = 1.0       # cut from bottom to reduce total thickness (mm)
+cut_h = 1.0     # cut from bottom to reduce total thickness (mm)
+edge_w = 2.0    # width of edge (mm) if hollow_d set to auto
 
 ##############
 #    code    #
@@ -54,9 +55,18 @@ def autocenter(base, center):
     zmin, zmax = bb.min[a], bb.max[a]
     # check which way to rotate (center of mass should be below geometric center)
     flip = -1 if (zcen-zmin > zmax-zcen) else 1
-    # do rotation
-    base = base.transform(rotate(np.pi/2,vec3(flip*(a==1),flip*(a==0),0)))
-    # center around x and y, z min to 0
+    
+    # if right orientation
+    if a == 2 and flip == 1:
+        return base
+    # if flipped
+    elif a == 2 and flip == -1:
+        base = base.transform(rotate(np.pi,vec3(1,0,0)))
+    # if on it's side
+    else:
+        base = base.transform(rotate(np.pi/2,vec3(flip*(a==1),flip*(a==0),0)))
+    
+    # center around x and y, z min to 
     bb = base.box()
     base = base.transform(translate(vec3(-bb.width[0]/2-bb.min[0],-bb.width[1]/2-bb.min[1],-bb.min[2])))
     return base
@@ -98,7 +108,7 @@ def magnetize(base,r_mag,h_mag,r_wash,h_wash,r_hollow=0,h_hollow=0,theta=90,cut_
     t2 = abs(h_wash-h_hollow)*c
     t3 = abs(h_hollow)*c
     if r_hollow == 0:
-        r_hollow = r-1.5
+        r_hollow = r-edge_w
     points = []
     points.append(h_mag*Z)                  # A
     points.append(h_mag*Z+r_mag*X)          # B
