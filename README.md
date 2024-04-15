@@ -16,6 +16,9 @@ This is a simple python script for batch editing bases for miniatures.
 ### Topper
 ![Topper](img/topper.png?raw=true)
 
+### Magnet and washer for more weight
+![Printed](img/base.jpg?raw=true)
+
 ## Installation
 - Install Python ver 3.11 or newer
 - Install [Microsoft Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)

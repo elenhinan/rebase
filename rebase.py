@@ -17,7 +17,7 @@ shim_h = 1.7    # shim height (mm)
 hollow_d = 0    # diameter to hollow out from stock (mm), 0 = auto-detect
 hollow_h = 2.2  # height to remove from bottom (mm), 0 = disable
 theta = 70      # degrees of edges, 90 = square edges
-cut_h = 1.0     # cut from bottom to reduce total thickness (mm)
+cut_h = 1.0     # cut from bottom to reduce total height (mm)
 edge_w = 2.0    # width of edge (mm) if hollow_d set to auto
 
 ##############
@@ -97,7 +97,8 @@ def magnetize(base,r_mag,h_mag,r_wash,h_wash,r_hollow=0,h_hollow=0,theta=90,cut_
     #         C          |__________F
     #                    E         |
     #  H___________________________|G
-    
+    #
+    #
     # angle B and D = theta
     bb = base.box()
     r = (bb.width[0]+bb.width[1])/4
